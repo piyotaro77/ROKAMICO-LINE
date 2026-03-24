@@ -4,15 +4,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="color-scheme" content="light">
+<meta name="color-scheme" content="dark">
 <title>🩵 やることリスト</title>
 <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
   :root {
-    color-scheme: light;
-    --bg: #f0fafe;
-    --card: #ffffff;
-    --border: #c9eaf5;
+    color-scheme: dark;
+    --bg: #0f0f0f;
+    --card: #1e1e1e;
+    --border: #333333;
     --purple: #7dd8f0;
     --dpurple: #00BFFF;
     --pink: #f9a8d4;
@@ -21,12 +21,12 @@
     --mint: #a7f3d0;
     --peach: #fcd5ce;
     --yellow: #fef3c7;
-    --text: #334155;
-    --sub: #94a3b8;
+    --text: #e8e8e8;
+    --sub: #888888;
     --danger: #ef4444;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  html { color-scheme: light; }
+  html { color-scheme: dark; }
   body {
     font-family: 'M PLUS Rounded 1c', sans-serif;
     background: var(--bg);
@@ -75,7 +75,7 @@ flex-shrink: 0;
 .cat-tab:hover { border-color: var(–purple); }
 .cat-tab.active { background: var(–dpurple); border-color: var(–dpurple); color: #fff; }
 .cat-count {
-display: inline-block; background: rgba(0,0,0,0.08);
+display: inline-block; background: rgba(255,255,255,0.08);
 border-radius: 8px; padding: 0 6px; margin-left: 4px; font-size: 10px;
 }
 .cat-tab.active .cat-count { background: rgba(255,255,255,0.25); }
@@ -92,7 +92,7 @@ font-size: 10px; font-weight: 700; color: var(–sub);
 cursor: pointer; transition: all 0.2s;
 }
 .filter-btn:hover { border-color: var(–purple); }
-.filter-btn.active { background: #e0f7fa; border-color: var(–dpurple); color: var(–dpurple); }
+.filter-btn.active { background: #0a2a3a; border-color: var(–dpurple); color: var(–dpurple); }
 .filter-spacer { flex: 1; }
 .sort-select {
 padding: 4px 8px; border-radius: 10px;
@@ -120,7 +120,7 @@ to { opacity: 1; transform: translateY(0); }
 .todo-item.priority-high { border-left: 4px solid var(–dpink); }
 .todo-item.priority-mid { border-left: 4px solid #f59e0b; }
 .todo-item.priority-low { border-left: 4px solid var(–mint); }
-.todo-item.overdue { background: #fef2f2; border-color: #fca5a5; }
+.todo-item.overdue { background: #2a1010; border-color: #6b2020; }
 
 .todo-check {
 width: 22px; height: 22px; border-radius: 50%;
@@ -129,7 +129,7 @@ cursor: pointer; flex-shrink: 0; margin-top: 2px;
 display: flex; align-items: center; justify-content: center;
 transition: all 0.2s; font-size: 12px;
 }
-.todo-check:hover { background: #e0f7fa; }
+.todo-check:hover { background: #1a2e3a; }
 .todo-item.done .todo-check {
 background: var(–dpurple); border-color: var(–dpurple); color: #fff;
 }
@@ -148,16 +148,16 @@ display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; align-items: center;
 font-size: 9px; font-weight: 700; padding: 2px 8px;
 border-radius: 8px; display: inline-block;
 }
-.badge-cat { background: #e0f7fa; color: var(–dpurple); }
-.badge-due { background: var(–yellow); color: #92400e; }
-.badge-due.overdue { background: #fee2e2; color: var(–danger); }
-.badge-priority-high { background: #fce7f3; color: var(–dpink); }
-.badge-priority-mid { background: #fef3c7; color: #d97706; }
-.badge-priority-low { background: #d1fae5; color: #059669; }
+.badge-cat { background: #0a2a3a; color: var(–dpurple); }
+.badge-due { background: #332b00; color: #fbbf24; }
+.badge-due.overdue { background: #3a0a0a; color: var(–danger); }
+.badge-priority-high { background: #3a0a1e; color: var(–dpink); }
+.badge-priority-mid { background: #332b00; color: #fbbf24; }
+.badge-priority-low { background: #0a2a1a; color: #34d399; }
 
 .todo-delete {
 background: none; border: none; font-size: 14px;
-cursor: pointer; color: #cbd5e1; padding: 2px;
+cursor: pointer; color: #555; padding: 2px;
 transition: color 0.2s; flex-shrink: 0;
 }
 .todo-delete:hover { color: var(–danger); }
@@ -264,9 +264,9 @@ font-size: 12px; font-weight: 700; color: var(–text);
 cursor: pointer; text-align: center; transition: all 0.2s;
 }
 .priority-opt:hover { transform: translateY(-1px); }
-.priority-opt.sel-high { border-color: var(–dpink); background: #fce7f3; color: var(–dpink); }
-.priority-opt.sel-mid { border-color: #f59e0b; background: #fef3c7; color: #d97706; }
-.priority-opt.sel-low { border-color: #10b981; background: #d1fae5; color: #059669; }
+.priority-opt.sel-high { border-color: var(–dpink); background: #3a0a1e; color: var(–dpink); }
+.priority-opt.sel-mid { border-color: #f59e0b; background: #332b00; color: #fbbf24; }
+.priority-opt.sel-low { border-color: #10b981; background: #0a2a1a; color: #34d399; }
 
 .form-submit {
 width: 100%; padding: 14px; border-radius: 14px; border: none;
@@ -294,7 +294,7 @@ font-size: 12px; font-weight: 900; color: var(–text);
 cursor: pointer; transition: all 0.2s; text-align: center;
 display: flex; flex-direction: column; align-items: center; gap: 2px;
 }
-.data-btn:hover { border-color: var(–purple); background: #e0f7fa; }
+.data-btn:hover { border-color: var(–purple); background: #0a2a3a; }
 .data-btn-sub { font-size: 9px; font-weight: 500; color: var(–sub); }
 
 /* Toast */
@@ -312,7 +312,7 @@ opacity: 0;
 .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
 .credit {
-text-align: center; font-size: 10px; color: #cbd5e1; margin-top: 20px;
+text-align: center; font-size: 10px; color: #555; margin-top: 20px;
 }
 </style>
 
