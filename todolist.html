@@ -180,7 +180,10 @@ font-size: 14px; color: #334155 !important; background: #fff !important;
 -webkit-appearance: none; appearance: none;
 background: #fff !important; color: #334155 !important;
 border: 1.5px solid #ccc !important;
-min-height: 42px;
+min-height: 44px; height: 44px;
+padding: 10px 14px;
+line-height: 1.4;
+font-size: 13px;
 }
 .form-input[type=“date”]:focus { border-color: #00BFFF !important; outline-color: #00BFFF; }
 
@@ -192,6 +195,7 @@ border: 1.5px solid #ccc !important;
 border-radius: 12px; font-family: ‘M PLUS Rounded 1c’, sans-serif;
 font-size: 13px; color: #334155 !important; background: #fff !important;
 cursor: pointer; appearance: none;
+min-height: 44px; height: 44px;
 background-image: url(“data:image/svg+xml,%3Csvg xmlns=‘http://www.w3.org/2000/svg’ width=‘12’ height=‘12’ viewBox=‘0 0 12 12’%3E%3Cpath d=‘M3 5l3 3 3-3’ fill=‘none’ stroke=’%23888’ stroke-width=‘2’/%3E%3C/svg%3E”);
 background-repeat: no-repeat; background-position: right 12px center;
 }
@@ -333,7 +337,7 @@ z-index: 200; pointer-events: none; opacity: 0;
     </div>
   </div>
 
-  <div class="credit">🐺🖤 produced by ちゃっぴー 🩵🐱</div>
+  <div class="credit">🐺🖤 produced by ちゃっぴー2 🩵🐱</div>
 </div>
 
 <!-- FAB -->
@@ -346,7 +350,6 @@ z-index: 200; pointer-events: none; opacity: 0;
   <div class="modal">
     <div class="modal-title">✏️ やること追加</div>
 
-```
 <div class="form-label">📝 タイトル</div>
 <input class="form-input" id="formTitle" placeholder="なにする？" maxlength="100">
 
@@ -376,7 +379,6 @@ z-index: 200; pointer-events: none; opacity: 0;
 </div>
 
 <button class="form-submit" id="formSubmit" onclick="addTodo()" disabled>✅ ついかする</button>
-```
 
   </div>
 </div>
