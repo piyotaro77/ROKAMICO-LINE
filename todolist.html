@@ -325,11 +325,11 @@ z-index: 200; pointer-events: none; opacity: 0;
         📤 エクスポート
         <span class="data-btn-sub">JSONで保存</span>
       </button>
-      <label class="data-btn">
+      <button class="data-btn" onclick="document.getElementById('importFile').click()">
         📥 インポート
         <span class="data-btn-sub">JSONを読み込む</span>
-        <input type="file" accept=".json" onchange="importData(event)" style="display:none">
-      </label>
+      </button>
+      <input type="file" id="importFile" accept=".json" onchange="importData(event)" style="display:none">
     </div>
   </div>
 
@@ -344,9 +344,9 @@ z-index: 200; pointer-events: none; opacity: 0;
 
 <div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
   <div class="modal">
-    <div class="modal-handle"></div>
     <div class="modal-title">✏️ やること追加</div>
 
+```
 <div class="form-label">📝 タイトル</div>
 <input class="form-input" id="formTitle" placeholder="なにする？" maxlength="100">
 
@@ -376,6 +376,7 @@ z-index: 200; pointer-events: none; opacity: 0;
 </div>
 
 <button class="form-submit" id="formSubmit" onclick="addTodo()" disabled>✅ ついかする</button>
+```
 
   </div>
 </div>
