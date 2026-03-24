@@ -4,10 +4,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light">
+<meta name="supported-color-schemes" content="light">
 <title>⏱️ もちもちポモドーロ</title>
 <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
   :root {
+    color-scheme: light;
     --bg-work: #fef7f0;
     --bg-break: #f0f7fe;
     --card: #ffffff;
@@ -20,6 +23,9 @@
     --sub: #94a3b8;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
+  html {
+    color-scheme: light;
+  }
   body {
     font-family: 'M PLUS Rounded 1c', sans-serif;
     min-height: 100vh;
@@ -460,7 +466,7 @@ margin-bottom: 12px;
 padding: 6px 14px;
 border-radius: 16px;
 border: 2px solid var(–lavender);
-background: white;
+background: var(–card);
 font-family: ‘M PLUS Rounded 1c’, sans-serif;
 font-size: 11px;
 font-weight: 700;
@@ -469,7 +475,7 @@ cursor: pointer;
 transition: all 0.2s;
 }
 .preset-btn:hover { background: #ede9fe; }
-.preset-btn.active { background: var(–lavender); color: white; }
+.preset-btn.active { background: var(–lavender); color: #fff; }
 
 /* Session counter */
 .session-section {
