@@ -4,12 +4,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="color-scheme" content="dark">
 <title>🩵 やることリスト</title>
 <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
   :root {
-    color-scheme: dark;
     --bg: #0f0f0f;
     --card: #ffffff;
     --border: #cccccc;
@@ -26,11 +24,10 @@
     --danger: #ef4444;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  html { color-scheme: dark; }
   body {
     font-family: 'M PLUS Rounded 1c', sans-serif;
-    background: var(--bg);
-    color: var(--text);
+    background: #0f0f0f !important;
+    color: #e0e0e0;
     min-height: 100vh;
     padding: 16px;
   }
@@ -51,12 +48,12 @@ background: linear-gradient(135deg, #00BFFF, var(–dpink));
 display: flex; gap: 8px; margin-bottom: 16px;
 }
 .stat-chip {
-flex: 1; background: var(–card); border: none;
+flex: 1; background: #ffffff !important; border: none;
 border-radius: 14px; padding: 10px 8px; text-align: center;
 box-shadow: 0 0 0 2px var(–border), 0 2px 8px rgba(0,0,0,0.1);
 }
 .stat-num { font-size: 20px; font-weight: 900; color: var(–dpurple); }
-.stat-label { font-size: 9px; color: var(–sub); font-weight: 700; }
+.stat-label { font-size: 9px; color: #666; font-weight: 700; }
 
 /* Category tabs */
 .cat-tabs {
@@ -67,7 +64,7 @@ overflow-x: auto; padding: 6px 2px 8px;
 .cat-tabs::-webkit-scrollbar { display: none; }
 .cat-tab {
 padding: 6px 14px; border-radius: 16px;
-border: none; background: var(–card);
+border: none; background: #ffffff !important;
 font-family: ‘M PLUS Rounded 1c’, sans-serif;
 font-size: 12px; font-weight: 700; color: var(–text);
 cursor: pointer; white-space: nowrap; transition: all 0.2s;
@@ -75,7 +72,7 @@ flex-shrink: 0;
 box-shadow: 0 0 0 2px var(–border), 0 2px 6px rgba(0,0,0,0.08);
 }
 .cat-tab:hover { box-shadow: 0 0 0 2px var(–dpurple), 0 2px 6px rgba(0,0,0,0.08); }
-.cat-tab.active { background: var(–dpurple); color: #fff; box-shadow: 0 0 0 2px var(–dpurple), 0 2px 8px rgba(0,191,255,0.3); }
+.cat-tab.active { background: var(–dpurple) !important; color: #fff; box-shadow: 0 0 0 2px var(–dpurple), 0 2px 8px rgba(0,191,255,0.3); }
 .cat-count {
 display: inline-block; background: rgba(255,255,255,0.08);
 border-radius: 8px; padding: 0 6px; margin-left: 4px; font-size: 10px;
@@ -88,18 +85,18 @@ display: flex; gap: 6px; margin-bottom: 14px; align-items: center;
 }
 .filter-btn {
 padding: 4px 10px; border-radius: 10px;
-border: none; background: var(–card);
+border: none; background: #ffffff !important;
 font-family: ‘M PLUS Rounded 1c’, sans-serif;
-font-size: 10px; font-weight: 700; color: var(–sub);
+font-size: 10px; font-weight: 700; color: #666;
 cursor: pointer; transition: all 0.2s;
 box-shadow: 0 0 0 1.5px var(–border);
 }
 .filter-btn:hover { box-shadow: 0 0 0 1.5px var(–dpurple); }
-.filter-btn.active { background: var(–card); box-shadow: 0 0 0 2px var(–dpurple); color: var(–dpurple); }
+.filter-btn.active { background: #ffffff !important; box-shadow: 0 0 0 2px var(–dpurple); color: var(–dpurple); }
 .filter-spacer { flex: 1; }
 .sort-select {
 padding: 4px 8px; border-radius: 10px;
-border: none; background: var(–card);
+border: none; background: #ffffff !important;
 font-family: ‘M PLUS Rounded 1c’, sans-serif;
 font-size: 10px; font-weight: 700; color: var(–text);
 cursor: pointer; outline: none;
@@ -110,7 +107,7 @@ box-shadow: 0 0 0 1.5px var(–border);
 .todo-list { display: flex; flex-direction: column; gap: 8px; }
 
 .todo-item {
-background: var(–card); border: none;
+background: #ffffff !important; border: none;
 border-radius: 16px; padding: 12px 14px;
 display: flex; align-items: flex-start; gap: 10px;
 transition: all 0.2s; position: relative;
@@ -129,7 +126,7 @@ to { opacity: 1; transform: translateY(0); }
 
 .todo-check {
 width: 22px; height: 22px; border-radius: 50%;
-border: none; background: var(–card);
+border: none; background: #ffffff !important;
 cursor: pointer; flex-shrink: 0; margin-top: 2px;
 display: flex; align-items: center; justify-content: center;
 transition: all 0.2s; font-size: 12px;
@@ -212,13 +209,13 @@ transition: all 0.2s; z-index: 50;
 
 /* Modal */
 .modal-overlay {
-position: fixed; inset: 0; background: rgba(0,0,0,0.3);
+position: fixed; inset: 0; background: rgba(0,0,0,0.7);
 display: none; align-items: flex-end; justify-content: center;
 z-index: 100;
 }
 .modal-overlay.open { display: flex; }
 .modal {
-background: var(–card); border-radius: 24px 24px 0 0;
+background: #ffffff !important; border-radius: 24px 24px 0 0;
 padding: 24px 20px 32px; width: 100%; max-width: 480px;
 animation: modalSlide 0.3s ease;
 max-height: 90vh; overflow-y: auto;
@@ -243,7 +240,7 @@ letter-spacing: 1px; margin-bottom: 6px; margin-top: 12px;
 .form-input {
 width: 100%; padding: 10px 14px; border: none;
 border-radius: 12px; font-family: ‘M PLUS Rounded 1c’, sans-serif;
-font-size: 14px; color: var(–text); background: var(–card);
+font-size: 14px; color: var(–text); background: #ffffff !important;
 outline: none; transition: box-shadow 0.2s;
 box-shadow: 0 0 0 2px var(–border);
 -webkit-appearance: none; appearance: none;
@@ -251,7 +248,7 @@ box-shadow: 0 0 0 2px var(–border);
 .form-input:focus { box-shadow: 0 0 0 2px var(–dpurple); }
 .form-input[type=“date”] {
 -webkit-appearance: none; appearance: none;
-background: var(–card);
+background: #ffffff !important;
 box-shadow: 0 0 0 2px var(–border);
 min-height: 42px;
 }
@@ -263,7 +260,7 @@ min-height: 42px;
 .form-select {
 width: 100%; padding: 10px 14px; border: none;
 border-radius: 12px; font-family: ‘M PLUS Rounded 1c’, sans-serif;
-font-size: 13px; color: var(–text); background: var(–card);
+font-size: 13px; color: var(–text); background: #ffffff !important;
 outline: none; cursor: pointer; appearance: none;
 box-shadow: 0 0 0 2px var(–border);
 background-image: url(“data:image/svg+xml,%3Csvg xmlns=‘http://www.w3.org/2000/svg’ width=‘12’ height=‘12’ viewBox=‘0 0 12 12’%3E%3Cpath d=‘M3 5l3 3 3-3’ fill=‘none’ stroke=’%2394a3b8’ stroke-width=‘2’/%3E%3C/svg%3E”);
@@ -275,7 +272,7 @@ display: flex; gap: 6px;
 }
 .priority-opt {
 flex: 1; padding: 8px; border-radius: 12px;
-border: none; background: var(–card);
+border: none; background: #ffffff !important;
 font-family: ‘M PLUS Rounded 1c’, sans-serif;
 font-size: 12px; font-weight: 700; color: var(–text);
 cursor: pointer; text-align: center; transition: all 0.2s;
@@ -300,21 +297,21 @@ transition: all 0.2s;
 
 /* Data management */
 .data-section {
-background: var(–card); border: none;
+background: #ffffff !important; border: none;
 border-radius: 16px; padding: 14px 16px; margin-top: 20px;
 box-shadow: 0 0 0 2px var(–border), 0 2px 8px rgba(0,0,0,0.08);
 }
 .data-actions { display: flex; gap: 8px; }
 .data-btn {
 flex: 1; padding: 10px 8px; border-radius: 12px;
-border: none; background: var(–card);
+border: none; background: #ffffff !important;
 font-family: ‘M PLUS Rounded 1c’, sans-serif;
 font-size: 12px; font-weight: 900; color: var(–text);
 cursor: pointer; transition: all 0.2s; text-align: center;
 display: flex; flex-direction: column; align-items: center; gap: 2px;
 box-shadow: 0 0 0 2px var(–border);
 }
-.data-btn:hover { box-shadow: 0 0 0 2px var(–dpurple); background: #e0f7fa; }
+.data-btn:hover { box-shadow: 0 0 0 2px var(–dpurple); }
 .data-btn-sub { font-size: 9px; font-weight: 500; color: var(–sub); }
 
 /* Toast */
