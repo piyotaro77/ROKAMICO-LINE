@@ -3,7 +3,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>おさかなすくい</title>
 <style>
 html, body {
@@ -16,6 +16,8 @@ html, body {
   touch-action: none;
   user-select: none;
   -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
 }
 #game {
   position: fixed;
@@ -50,24 +52,28 @@ try {
   var F = "sans-serif";
   var W = 360, H = 640;
 
+/* === ellipse polyfill for older iOS === */
+function drawEllipse(cx, cy, rx, ry, rot, sa, ea) {
+ctx.save();
+ctx.translate(cx, cy);
+if (rot) ctx.rotate(rot);
+ctx.scale(1, ry / (rx || 1));
+ctx.beginPath();
+ctx.arc(0, 0, rx, sa, ea);
+ctx.restore();
+}
+
 function figureSize() {
 var w = 360, h = 640;
-// Try multiple ways to get the actual size
-if (canvas.offsetWidth > 0 && canvas.offsetHeight > 0) {
-w = canvas.offsetWidth;
-h = canvas.offsetHeight;
-} else if (canvas.clientWidth > 0 && canvas.clientHeight > 0) {
-w = canvas.clientWidth;
-h = canvas.clientHeight;
-} else if (canvas.parentElement && canvas.parentElement.offsetWidth > 0) {
-w = canvas.parentElement.offsetWidth;
-h = canvas.parentElement.offsetHeight;
+if (window.innerWidth > 0 && window.innerHeight > 0) {
+w = window.innerWidth;
+h = window.innerHeight;
 } else if (document.documentElement.clientWidth > 0) {
 w = document.documentElement.clientWidth;
 h = document.documentElement.clientHeight;
-} else if (window.innerWidth > 0) {
-w = window.innerWidth;
-h = window.innerHeight;
+} else if (canvas.offsetWidth > 0 && canvas.offsetHeight > 0) {
+w = canvas.offsetWidth;
+h = canvas.offsetHeight;
 }
 return { w: Math.max(w, 300), h: Math.max(h, 400) };
 }
@@ -75,18 +81,18 @@ return { w: Math.max(w, 300), h: Math.max(h, 400) };
 function doResize() {
 var s = figureSize();
 W = s.w; H = s.h;
-canvas.width = W;
-canvas.height = H;
+var dpr = window.devicePixelRatio || 1;
+canvas.width = W * dpr;
+canvas.height = H * dpr;
+canvas.style.width = W + “px”;
+canvas.style.height = H + “px”;
+ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 }
 
-// Use ResizeObserver if available
-if (typeof ResizeObserver !== “undefined”) {
-var ro = new ResizeObserver(function() { doResize(); });
-ro.observe(canvas);
-if (canvas.parentElement) ro.observe(canvas.parentElement);
-ro.observe(document.body);
-}
 window.addEventListener(“resize”, doResize);
+window.addEventListener(“orientationchange”, function() {
+setTimeout(doResize, 200);
+});
 
 function rrF(x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();ctx.fill();}
 function rrS(x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();ctx.stroke();}
@@ -94,14 +100,14 @@ function rrS(x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+
 var st=“title”,sc=0,hp=5,MH=5,tmr=30,tmrS=0;
 var coll=[],pts=[],rips=[],spls=[];
 var FT=[
-{n:“きんぎょ”,e:“🐟”,c:”#ff6b6b”,p:1,sp:1.2,sz:28,rt:0.28,ra:false,ob:false},
-{n:“めだか”,e:“🐠”,c:”#ffa94d”,p:1,sp:1.5,sz:24,rt:0.22,ra:false,ob:false},
-{n:“ねおんてとら”,e:“🐟”,c:”#74c0fc”,p:2,sp:1.8,sz:22,rt:0.14,ra:false,ob:false},
-{n:“くらげ”,e:“🪼”,c:”#d8b4fe”,p:2,sp:0.6,sz:30,rt:0.09,ra:false,ob:false},
-{n:“たつのおとしご”,e:“🐡”,c:”#f783ac”,p:3,sp:0.8,sz:26,rt:0.07,ra:false,ob:false},
-{n:“くろねこざかな”,e:“🐈‍⬛”,c:”#495057”,p:5,sp:2.0,sz:32,rt:0.04,ra:true,ob:false},
-{n:“にじいろさかな”,e:“🌈”,c:”#e599f7”,p:5,sp:1.0,sz:34,rt:0.03,ra:true,ob:false},
-{n:“カニ”,e:“🦀”,c:”#ef4444”,p:0,sp:0.9,sz:32,rt:0.13,ra:false,ob:true}
+{n:“きんぎょ”,e:”\uD83D\uDC1F”,c:”#ff6b6b”,p:1,sp:1.2,sz:28,rt:0.28,ra:false,ob:false},
+{n:“めだか”,e:”\uD83D\uDC20”,c:”#ffa94d”,p:1,sp:1.5,sz:24,rt:0.22,ra:false,ob:false},
+{n:“ねおんてとら”,e:”\uD83D\uDC1F”,c:”#74c0fc”,p:2,sp:1.8,sz:22,rt:0.14,ra:false,ob:false},
+{n:“くらげ”,e:”\uD83E\uDEBC”,c:”#d8b4fe”,p:2,sp:0.6,sz:30,rt:0.09,ra:false,ob:false},
+{n:“たつのおとしご”,e:”\uD83D\uDC21”,c:”#f783ac”,p:3,sp:0.8,sz:26,rt:0.07,ra:false,ob:false},
+{n:“くろねこざかな”,e:”\uD83D\uDC08”,c:”#495057”,p:5,sp:2.0,sz:32,rt:0.04,ra:true,ob:false},
+{n:“にじいろさかな”,e:”\uD83C\uDF08”,c:”#e599f7”,p:5,sp:1.0,sz:34,rt:0.03,ra:true,ob:false},
+{n:“カニ”,e:”\uD83E\uDD80”,c:”#ef4444”,p:0,sp:0.9,sz:32,rt:0.13,ra:false,ob:true}
 ];
 var fish=[],pX=180,pY=320,tX=180,tY=320;
 var scoop=false,scA=0,wl=0,sBtn=null,rBtn=null,PR=36;
@@ -155,15 +161,18 @@ function dFish(f,t){
 ctx.save();var wy=Math.sin(f.wb)*f.wa;
 var dx=f.x,dy=f.ct?f.cy:f.y+wy;
 ctx.translate(dx,dy);if(f.d===1)ctx.scale(-1,1);
-if(!f.ct){ctx.fillStyle=“rgba(0,0,0,0.06)”;ctx.beginPath();
-ctx.ellipse(0,f.sz*0.4,f.sz*0.7,f.sz*0.15,0,0,Math.PI*2);ctx.fill();}
+if(!f.ct){
+ctx.fillStyle=“rgba(0,0,0,0.06)”;
+drawEllipse(0, f.sz*0.4, f.sz*0.7, f.sz*0.15, 0, 0, Math.PI*2);
+ctx.fill();
+}
 ctx.font=f.sz+“px serif”;ctx.textAlign=“center”;ctx.textBaseline=“middle”;
 if(f.tp.ra){ctx.shadowColor=f.tp.c;ctx.shadowBlur=12;}
 if(f.tp.ob){ctx.shadowColor=”#ef4444”;ctx.shadowBlur=10;}
 ctx.fillText(f.tp.e,0,0);ctx.shadowBlur=0;
 if(f.tp.ra&&!f.ct){for(var i=0;i<3;i++){var an=t*3+(i/3)*Math.PI*2;
 ctx.font=“8px serif”;ctx.globalAlpha=0.4+Math.sin(t*5+i)*0.3;
-ctx.fillText(“✨”,Math.cos(an)*f.sz*0.6,Math.sin(an)*f.sz*0.4);}ctx.globalAlpha=1;}
+ctx.fillText(”\u2728”,Math.cos(an)*f.sz*0.6,Math.sin(an)*f.sz*0.4);}ctx.globalAlpha=1;}
 ctx.restore();
 }
 
@@ -172,12 +181,12 @@ ctx.fillStyle=“rgba(255,255,255,0.85)”;rrF(12,10,W-24,56,16);
 ctx.strokeStyle=“rgba(147,197,253,0.4)”;ctx.lineWidth=2;rrS(12,10,W-24,56,16);
 var p=0;for(var i=0;i<coll.length;i++)p+=coll[i].p;
 ctx.font=“bold 18px “+F;ctx.fillStyle=”#3b82f6”;ctx.textAlign=“left”;ctx.fillText(p+“pt”,24,36);
-ctx.font=“bold 11px “+F;ctx.fillStyle=”#94a3b8”;ctx.fillText(“🐟”+sc+“ぴき”,24,52);
+ctx.font=“bold 11px “+F;ctx.fillStyle=”#94a3b8”;ctx.fillText(”\uD83D\uDC1F”+sc+”\u3074\u304D”,24,52);
 ctx.textAlign=“center”;var tl=Math.max(0,Math.ceil(tmr));
-ctx.fillStyle=tl<=5?”#ef4444”:”#6366f1”;ctx.fillText(“⏱ “+tl+“s”,W/2,44);
-ctx.textAlign=“right”;var hh=””;for(var j=0;j<MH;j++)hh+=j<hp?“🟢”:“⚫”;
+ctx.fillStyle=tl<=5?”#ef4444”:”#6366f1”;ctx.fillText(”\u23F1 “+tl+“s”,W/2,44);
+ctx.textAlign=“right”;var hh=””;for(var j=0;j<MH;j++)hh+=j<hp?”\uD83D\uDFE2”:”\u26AB”;
 ctx.font=“14px serif”;ctx.fillText(hh,W-24,42);
-ctx.font=“bold 10px “+F;ctx.fillStyle=”#94a3b8”;ctx.fillText(“ポイHP”,W-50,26);
+ctx.font=“bold 10px “+F;ctx.fillStyle=”#94a3b8”;ctx.fillText(”\u30DD\u30A4HP”,W-50,26);
 }
 
 function dTitle(t){
@@ -191,18 +200,18 @@ ctx.font=(22+i2*2)+“px serif”;ctx.textAlign=“center”;ctx.fillText(FT[i2%
 var cw=Math.min(360,W-40),ch=280,cx=(W-cw)/2,cy=H*0.18;
 ctx.fillStyle=“rgba(255,255,255,0.92)”;rrF(cx,cy,cw,ch,24);
 ctx.strokeStyle=“rgba(147,197,253,0.5)”;ctx.lineWidth=3;rrS(cx,cy,cw,ch,24);
-ctx.textAlign=“center”;ctx.font=“40px serif”;ctx.fillStyle=”#000”;ctx.fillText(“🌊”,W/2,cy+52);
-ctx.font=“bold 28px “+F;ctx.fillStyle=”#3b82f6”;ctx.fillText(“おさかなすくい”,W/2,cy+100);
+ctx.textAlign=“center”;ctx.font=“40px serif”;ctx.fillStyle=”#000”;ctx.fillText(”\uD83C\uDF0A”,W/2,cy+52);
+ctx.font=“bold 28px “+F;ctx.fillStyle=”#3b82f6”;ctx.fillText(”\u304A\u3055\u304B\u306A\u3059\u304F\u3044”,W/2,cy+100);
 ctx.font=“13px “+F;ctx.fillStyle=”#94a3b8”;
-ctx.fillText(“タップでおさかなをすくおう！”,W/2,cy+135);
-ctx.fillText(“レアなおさかなを見つけてね🐈‍⬛✨”,W/2,cy+155);
+ctx.fillText(”\u30BF\u30C3\u30D7\u3067\u304A\u3055\u304B\u306A\u3092\u3059\u304F\u304A\u3046\uFF01”,W/2,cy+135);
+ctx.fillText(”\u30EC\u30A2\u306A\u304A\u3055\u304B\u306A\u3092\u898B\u3064\u3051\u3066\u306D\uD83D\uDC08\u2728”,W/2,cy+155);
 ctx.font=“11px “+F;ctx.fillStyle=”#a78bfa”;
-ctx.fillText(“⏱ 制限時間30秒 ｜ 🟢 ポイは5回まで破れる”,W/2,cy+182);
-ctx.fillStyle=”#ef4444”;ctx.fillText(“🦀 カニに注意！さわるとポイが破れるよ！”,W/2,cy+200);
+ctx.fillText(”\u23F1 \u5236\u9650\u6642\u959330\u79D2 \uFF5C \uD83D\uDFE2 \u30DD\u30A4\u306F5\u56DE\u307E\u3067\u7834\u308C\u308B”,W/2,cy+182);
+ctx.fillStyle=”#ef4444”;ctx.fillText(”\uD83E\uDD80 \u30AB\u30CB\u306B\u6CE8\u610F\uFF01\u3055\u308F\u308B\u3068\u30DD\u30A4\u304C\u7834\u308C\u308B\u3088\uFF01”,W/2,cy+200);
 var bw=200,bh=48,bx2=(W-bw)/2,by2=cy+218;
 var g=ctx.createLinearGradient(bx2,by2,bx2+bw,by2+bh);
 g.addColorStop(0,”#93c5fd”);g.addColorStop(1,”#f9a8d4”);ctx.fillStyle=g;rrF(bx2,by2,bw,bh,24);
-ctx.font=“bold 16px “+F;ctx.fillStyle=”#fff”;ctx.fillText(“はじめる 🐟”,W/2,by2+31);
+ctx.font=“bold 16px “+F;ctx.fillStyle=”#fff”;ctx.fillText(”\u306F\u3058\u3081\u308B \uD83D\uDC1F”,W/2,by2+31);
 sBtn={x:bx2,y:by2,w:bw,h:bh};
 }
 
@@ -212,20 +221,20 @@ var cw=Math.min(380,W-32),cx=(W-cw)/2,cy=30;
 ctx.fillStyle=“rgba(255,255,255,0.93)”;rrF(cx,cy,cw,H-80,24);
 ctx.strokeStyle=“rgba(147,197,253,0.4)”;ctx.lineWidth=2;rrS(cx,cy,cw,H-80,24);
 ctx.textAlign=“center”;ctx.font=“bold 14px “+F;ctx.fillStyle=”#a78bfa”;
-ctx.fillText(“🎉 けっか 🎉”,W/2,cy+40);
+ctx.fillText(”\uD83C\uDF89 \u3051\u3063\u304B \uD83C\uDF89”,W/2,cy+40);
 var tp=0;for(var i=0;i<coll.length;i++)tp+=coll[i].p;
 ctx.font=“bold 42px “+F;ctx.fillStyle=”#3b82f6”;ctx.fillText(tp+“pt”,W/2,cy+88);
 ctx.font=“bold 14px “+F;ctx.fillStyle=”#94a3b8”;
-ctx.fillText(“🐟 “+sc+“ぴきすくった！”,W/2,cy+112);
-var rt=“⭐”,cm=“がんばったね！”;
-if(tp>=30){rt=“⭐⭐⭐”;cm=“すくいの天才…！！✨”;}
-else if(tp>=20){rt=“⭐⭐⭐”;cm=“すごい！おさかなマスター🐟”;}
-else if(tp>=12){rt=“⭐⭐”;cm=“なかなかやるね！🌊”;}
-else if(tp>=5){rt=“⭐”;cm=“いい感じ！もう一回？”;}
+ctx.fillText(”\uD83D\uDC1F “+sc+”\u3074\u304D\u3059\u304F\u3063\u305F\uFF01”,W/2,cy+112);
+var rt=”\u2B50”,cm=”\u304C\u3093\u3070\u3063\u305F\u306D\uFF01”;
+if(tp>=30){rt=”\u2B50\u2B50\u2B50”;cm=”\u3059\u304F\u3044\u306E\u5929\u624D\u2026\uFF01\uFF01\u2728”;}
+else if(tp>=20){rt=”\u2B50\u2B50\u2B50”;cm=”\u3059\u3054\u3044\uFF01\u304A\u3055\u304B\u306A\u30DE\u30B9\u30BF\u30FC\uD83D\uDC1F”;}
+else if(tp>=12){rt=”\u2B50\u2B50”;cm=”\u306A\u304B\u306A\u304B\u3084\u308B\u306D\uFF01\uD83C\uDF0A”;}
+else if(tp>=5){rt=”\u2B50”;cm=”\u3044\u3044\u611F\u3058\uFF01\u3082\u3046\u4E00\u56DE\uFF1F”;}
 ctx.font=“28px serif”;ctx.fillStyle=”#000”;ctx.fillText(rt,W/2,cy+145);
 ctx.font=“bold 15px “+F;ctx.fillStyle=”#f472b6”;ctx.fillText(cm,W/2,cy+175);
-ctx.font=“bold 12px “+F;ctx.fillStyle=”#6366f1”;ctx.fillText(“📦 コレクション”,W/2,cy+210);
-if(coll.length===0){ctx.font=“12px “+F;ctx.fillStyle=”#94a3b8”;ctx.fillText(“おさかながすくえなかった…🥲”,W/2,cy+245);
+ctx.font=“bold 12px “+F;ctx.fillStyle=”#6366f1”;ctx.fillText(”\uD83D\uDCE6 \u30B3\u30EC\u30AF\u30B7\u30E7\u30F3”,W/2,cy+210);
+if(coll.length===0){ctx.font=“12px “+F;ctx.fillStyle=”#94a3b8”;ctx.fillText(”\u304A\u3055\u304B\u306A\u304C\u3059\u304F\u3048\u306A\u304B\u3063\u305F\u2026\uD83E\uDD72”,W/2,cy+245);
 }else{var counts={};
 for(var ci=0;ci<coll.length;ci++){var k=coll[ci].n;
 if(!counts[k])counts[k]={nm:k,em:coll[ci].e,pt:coll[ci].p,ra:coll[ci].ra,cnt:0};counts[k].cnt++;}
@@ -234,13 +243,13 @@ var yO=cy+230;
 for(var ei=0;ei<en.length;ei++){var e=en[ei],rowY=yO+ei*34;if(rowY>H-140)break;
 ctx.fillStyle=e.ra?“rgba(253,230,138,0.2)”:“rgba(147,197,253,0.08)”;rrF(cx+20,rowY-12,cw-40,30,8);
 ctx.textAlign=“left”;ctx.font=“20px serif”;ctx.fillStyle=”#000”;ctx.fillText(e.em,cx+30,rowY+8);
-ctx.font=“bold 13px “+F;ctx.fillStyle=e.ra?”#d97706”:”#475569”;ctx.fillText(e.nm+(e.ra?” ✨”:””),cx+60,rowY+6);
+ctx.font=“bold 13px “+F;ctx.fillStyle=e.ra?”#d97706”:”#475569”;ctx.fillText(e.nm+(e.ra?” \u2728”:””),cx+60,rowY+6);
 ctx.textAlign=“right”;ctx.fillStyle=”#94a3b8”;ctx.font=“bold 12px “+F;
 ctx.fillText(“x”+e.cnt+”  (”+(e.pt*e.cnt)+“pt)”,cx+cw-30,rowY+6);ctx.textAlign=“center”;}}
 var bw=200,bh=46,bx2=(W-bw)/2,by2=H-90;
 var g=ctx.createLinearGradient(bx2,by2,bx2+bw,by2+bh);
 g.addColorStop(0,”#93c5fd”);g.addColorStop(1,”#f9a8d4”);ctx.fillStyle=g;rrF(bx2,by2,bw,bh,23);
-ctx.font=“bold 15px “+F;ctx.fillStyle=”#fff”;ctx.fillText(“もういっかい 🌊”,W/2,by2+29);
+ctx.font=“bold 15px “+F;ctx.fillStyle=”#fff”;ctx.fillText(”\u3082\u3046\u3044\u3063\u304B\u3044 \uD83C\uDF0A”,W/2,by2+29);
 rBtn={x:bx2,y:by2,w:bw,h:bh};
 }
 
@@ -252,19 +261,20 @@ if(st!==“playing”||hp<=0)return;scoop=true;scA=1;aR(x,y);
 var ca=false,hi=false;
 for(var i=0;i<fish.length;i++){var f=fish[i];if(f.ct)continue;
 var wy=Math.sin(f.wb)*f.wa,fx=f.x,fy=f.y+wy;
-var dx=fx-x,dy2=fy-y,dist=Math.sqrt(dx*dx+dy2*dy2);
+var ddx=fx-x,ddy=fy-y,dist=Math.sqrt(ddx*ddx+ddy*ddy);
 if(dist<PR+f.sz*0.4){
 if(f.tp.ob){hi=true;f.ct=true;f.cy=fy;f.cm=0;hp–;aP(fx,fy,”#ef4444”,10);
-aS(fx,fy-20,“🦀 ビリッ！”,”#ef4444”);
-if(hp<=0){aS(W/2,H*0.3,“ポイがやぶれちゃった！”,”#ef4444”);setTimeout(function(){st=“result”;},1200);}
+aS(fx,fy-20,”\uD83E\uDD80 \u30D3\u30EA\u30C3\uFF01”,”#ef4444”);
+if(hp<=0){aS(W/2,H*0.3,”\u30DD\u30A4\u304C\u3084\u3076\u308C\u3061\u3083\u3063\u305F\uFF01”,”#ef4444”);setTimeout(function(){st=“result”;},1200);}
 }else{f.ct=true;f.cy=fy;f.cm=0;sc++;coll.push(f.tp);ca=true;aP(fx,fy,f.tp.c,8);
-aS(fx,fy-20,f.tp.ra?(“✨”+f.tp.n+”!✨”):(”+”+f.tp.p),f.tp.ra?”#d97706”:”#3b82f6”);
+aS(fx,fy-20,f.tp.ra?(”\u2728”+f.tp.n+”!\u2728”):(”+”+f.tp.p),f.tp.ra?”#d97706”:”#3b82f6”);
 if(f.tp.ra)aP(fx,fy,”#fbbf24”,15);}}}
-if(!ca&&!hi&&y>wl){hp–;aS(x,y-20,“ビリッ💦”,”#ef4444”);
-if(hp<=0){aS(W/2,H*0.3,“ポイがやぶれちゃった！”,”#ef4444”);setTimeout(function(){st=“result”;},1200);}}
+if(!ca&&!hi&&y>wl){hp–;aS(x,y-20,”\u30D3\u30EA\u30C3\uD83D\uDCA6”,”#ef4444”);
+if(hp<=0){aS(W/2,H*0.3,”\u30DD\u30A4\u304C\u3084\u3076\u308C\u3061\u3083\u3063\u305F\uFF01”,”#ef4444”);setTimeout(function(){st=“result”;},1200);}}
 }
 
 function gP(e){var r=canvas.getBoundingClientRect();var s=e.touches?e.touches[0]:e;
+if(!s) return {x:pX, y:pY};
 return{x:(s.clientX-r.left)*(W/r.width),y:(s.clientY-r.top)*(H/r.height)};}
 
 function onT(e){e.preventDefault();var p=gP(e);
@@ -279,10 +289,11 @@ canvas.addEventListener(“touchstart”,onT,{passive:false});canvas.addEventLis
 var lS=0;
 function fil(a,fn){var o=[];for(var i=0;i<a.length;i++)if(fn(a[i]))o.push(a[i]);return o;}
 
+var lastTs = 0;
 function loop(ts){
 try {
-if(!ts)ts=16;
-doResize();
+if(!ts) ts = lastTs + 16;
+lastTs = ts;
 var t=ts/1000;wl=H*0.35;
 
 ```
@@ -294,7 +305,7 @@ var si=Math.max(250,450-(tmr<15?150:0));
 if(ts-lS>si){var scc=Math.random()<0.4?3:2;for(var s=0;s<scc;s++)spwn();lS=ts;}
 pX+=(tX-pX)*0.15;pY+=(tY-pY)*0.15;
 
-for(var fi=0;fi<fish.length;fi++){var f=fish[fi];
+for(var fi2=0;fi2<fish.length;fi2++){var f=fish[fi2];
   if(f.ct){f.cm++;f.cy-=2;if(f.cm>40)f.rm=true;continue;}
   f.x+=f.sp*f.d;f.wb+=f.ws;if(f.x<-60||f.x>W+60)f.rm=true;}
 fish=fil(fish,function(f){return!f.rm;});
@@ -311,7 +322,8 @@ var sg=ctx.createLinearGradient(0,0,0,wl);sg.addColorStop(0,"#e0f2fe");sg.addCol
 ctx.fillStyle=sg;ctx.fillRect(0,0,W,H);
 ctx.fillStyle="rgba(255,255,255,0.6)";
 for(var ci=0;ci<4;ci++){var ccx=((t*15+ci*150)%(W+100))-50;
-  ctx.beginPath();ctx.ellipse(ccx,40+ci*25,40+ci*10,15,0,0,Math.PI*2);ctx.fill();}
+  drawEllipse(ccx, 40+ci*25, 40+ci*10, 15, 0, 0, Math.PI*2);
+  ctx.fill();}
 dWat(t);
 for(var rdi=0;rdi<rips.length;rdi++){var rrr=rips[rdi];ctx.beginPath();ctx.arc(rrr.x,rrr.y,rrr.r,0,Math.PI*2);
   ctx.strokeStyle="rgba(255,255,255,"+rrr.a+")";ctx.lineWidth=2;ctx.stroke();}
@@ -331,22 +343,21 @@ requestAnimationFrame(loop);
 
 }
 
-// Start after a small delay + also try on various events
 function init() {
 doResize();
 requestAnimationFrame(loop);
 }
 
 if (document.readyState === “complete” || document.readyState === “interactive”) {
-setTimeout(init, 50);
+setTimeout(init, 100);
 } else {
-document.addEventListener(“DOMContentLoaded”, function() { setTimeout(init, 50); });
+document.addEventListener(“DOMContentLoaded”, function() { setTimeout(init, 100); });
 }
-window.addEventListener(“load”, function() { setTimeout(init, 100); });
+window.addEventListener(“load”, function() { setTimeout(init, 150); });
 })();
 } catch(e) {
-document.getElementById(“err”).style.display=“block”;
-document.getElementById(“err”).textContent=“INIT ERR: “+e.message;
+var el = document.getElementById(“err”);
+if(el){el.style.display=“block”;el.textContent=“INIT ERR: “+e.message;}
 }
 </script>
 
